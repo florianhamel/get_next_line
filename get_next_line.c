@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fhamel <fhamel@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/20 15:01:30 by fhamel            #+#    #+#             */
+/*   Updated: 2020/01/20 15:05:41 by fhamel           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 int	rest_mgmt(char **rest, char **line)
@@ -36,7 +48,7 @@ int	buff_mgmt(char **rest, char **line, char *buff)
 
 	i = 0;
 	j = 0;
-	while(buff[i] != '\0' && buff[i] != '\n')
+	while (buff[i] != '\0' && buff[i] != '\n')
 		i++;
 	if (concat(line, buff, buff[i]))
 		return (-1);
@@ -44,6 +56,7 @@ int	buff_mgmt(char **rest, char **line, char *buff)
 	{
 		while (buff[j])
 			j++;
+		free(*rest);
 		if (!(*rest = (char *)malloc(sizeof(char) * (j - i))))
 			return (-1);
 		fill(*rest, &buff[i + 1], '\0');
@@ -58,9 +71,9 @@ int	get_next_line(int fd, char **line)
 	int			ret;
 	int			b_read;
 	char		buff[BUFFER_SIZE + 1];
-	
+
 	if (BUFFER_SIZE <= 0 || !line)
-		return (-1); 
+		return (-1);
 	*line = NULL;
 	if ((ret = rest_mgmt(&rest, line)))
 		return (ret);
@@ -78,22 +91,3 @@ int	get_next_line(int fd, char **line)
 	rest = NULL;
 	return (0);
 }
-
-#include <fcntl.h>
-
-// int main()
-// {
-// 	int		fd;
-// 	char	*line = NULL;
-// 	int		ret;
-
-// 	if ((fd = open("./get_next_line.c", O_RDONLY)) < 0)
-// 		printf("Error opening\n");
-// 	while ((ret = get_next_line(180, &line)) > 0)
-// 	{
-// 		printf("%s\n", line);
-// 		free(line);
-// 		line = NULL;
-// 	}
-// 	return (0);
-// }
